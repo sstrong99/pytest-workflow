@@ -8,6 +8,11 @@ Changelog
 .. This document is user facing. Please word the changes in such a way
 .. that users understand how the changes affect the new version.
 
+version 2.2.0-dev
+---------------------------
++ Add an optional ``metadata`` field to the test yaml schema that can be used
+  for custom tests.
+
 version 2.1.0
 ---------------------------
 + Python version 3.7 support is dropped because it is deprecated. Python
@@ -50,9 +55,9 @@ are skipped.
 + Tests for checking file content are now skipped when the file does not exist
   in order to reduce visual clutter when reporting failing tests.
 + Test and support for Python 3.11.
-+ Add ``--stderr-bytes`` or ``--sb`` option to change the maximum 
-  number of bytes to display for the stderr and stdout on 
-  command failure. 
++ Add ``--stderr-bytes`` or ``--sb`` option to change the maximum
+  number of bytes to display for the stderr and stdout on
+  command failure.
 + Add stderr and stdout to be displayed on command failure
 + Document using ``pytest.ini`` as a way of setting specific per repository
   settings for pytest-workflow.
@@ -302,4 +307,4 @@ Version 0.1.0
 + Pytest-workflow now has continuous integration and coverage reporting,
   so we can detect regressions quickly and only publish well-tested versions.
 + Fully parametrized tests enabled by changing code structure.
-+ Initialized pytest-workflow with option to test if files exist. 
++ Initialized pytest-workflow with option to test if files exist.

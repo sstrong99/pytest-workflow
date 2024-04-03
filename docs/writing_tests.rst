@@ -44,6 +44,10 @@ Test options
 
   - name: simple echo                  # A second workflow. Notice the starting `-` which means
     command: "echo moo"                # that workflow items are in a list. You can add as much workflows as you want
+    metadata:                          # A list of metadata to associate with the test and can be used to, for example,
+      - "some metadata"                # parameterize custom workflows. Each metadata entry can be a simple string
+      - structured_metadata:           # or a complex structured object
+          key: value
     files:
       - path: "moo.txt"
         should_exist: false            # Whether a file should be there or not. (optional, if not given defaults to true)
