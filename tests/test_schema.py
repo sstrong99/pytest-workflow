@@ -20,14 +20,15 @@ import os
 from pathlib import Path
 
 import jsonschema
-
 import pytest
-
-from pytest_workflow.schema import ContentTest, FileTest, WorkflowTest, \
-        validate_schema, workflow_tests_from_schema
-
 import yaml
-
+from pytest_workflow.schema import (
+    ContentTest,
+    FileTest,
+    WorkflowTest,
+    validate_schema,
+    workflow_tests_from_schema,
+)
 VALID_YAML_DIR = Path(__file__).parent / "yamls" / "valid"
 VALID_YAMLS = os.listdir(VALID_YAML_DIR)
 
@@ -50,6 +51,10 @@ def test_workflowtest():
         assert tests[0].stdout.contains == ["bla"]
         assert tests[0].exit_code == 127
         assert tests[0].tags == ["simple", "use_echo"]
+        assert tests[0].metadata == [
+            "simple item", 
+            {"complex_item": {"key": "value", "list_field": ["item1", "item2"]}, "key1": "value1"}
+        ]
 
 
 def test_workflowtest_regex():

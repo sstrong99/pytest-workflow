@@ -26,6 +26,14 @@
     encoding: UTF8
   exit_code: 127
   command: "the one string"
+  metadata:
+    - "simple item"
+    - complex_item:
+        key: value
+        list_field:
+          - item1
+          - item2
+      key1: value1
 - name: other test
   command: "cowsay moo"
   files:
