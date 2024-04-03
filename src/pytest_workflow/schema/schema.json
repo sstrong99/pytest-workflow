@@ -31,6 +31,13 @@
           "type": "string"
         }
       },
+      "metadata": {
+        "description": "Metadata for the workflow test",
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
       "command": {
         "description": "The command that is run for the workflow",
         "type": "string",
