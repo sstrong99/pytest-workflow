@@ -51,12 +51,11 @@ def validate_schema(instance):
     # Test if there are name collisions when whitespace is removed. This will
     # cause errors in pytest (collectors not having unique names) so has to
     # be avoided.
-    test_names = [replace_whitespace(test["name"], " ") for test in instance]
+    test_names = [replace_whitespace(test['name'], ' ') for test in instance]
     if len(test_names) != len(set(test_names)):
         raise jsonschema.ValidationError(
             f"Some names were not unique when whitespace was removed. "
-            f"Defined names: {test_names}"
-        )
+            f"Defined names: {test_names}")
 
     def test_contains_concordance(dictionary: dict, name: str):
         """
@@ -78,20 +77,22 @@ def validate_schema(instance):
                 )
 
     for test in instance:
-        test_contains_concordance(test.get("stdout", {}), test["name"] + "/stdout")
-        test_contains_concordance(test.get("stderr", {}), test["name"] + "/stderr")
+        test_contains_concordance(test.get('stdout', {}),
+                                  test['name'] + "/stdout")
+        test_contains_concordance(test.get('stderr', {}),
+                                  test['name'] + "/stderr")
         for test_file in test.get("files", []):
             keys = test_file.keys()
-            test_contains_concordance(test_file, test_file["path"])
-            file_should_exist = test_file.get("should_exist", DEFAULT_FILE_SHOULD_EXIST)
+            test_contains_concordance(test_file, test_file['path'])
+            file_should_exist = test_file.get("should_exist",
+                                              DEFAULT_FILE_SHOULD_EXIST)
 
             if not file_should_exist:
                 for check in ["md5sum", "contains", "must_not_contain"]:
                     if check in keys:
                         raise jsonschema.ValidationError(
                             f"Content checking not allowed on non existing "
-                            f"file: {test_file['path']}. Key = {check}"
-                        )
+                            f"file: {test_file['path']}. Key = {check}")
 
 
 # Schema classes below
@@ -109,15 +110,11 @@ class ContentTest(object):
     Everything in `must_not_contain` and `must_not_contain_regex` should
     not be present.
     """
-
-    def __init__(
-        self,
-        contains: Optional[List[str]] = None,
-        must_not_contain: Optional[List[str]] = None,
-        contains_regex: Optional[List[str]] = None,
-        must_not_contain_regex: Optional[List[str]] = None,
-        encoding: Optional[str] = None,
-    ):
+    def __init__(self, contains: Optional[List[str]] = None,
+                 must_not_contain: Optional[List[str]] = None,
+                 contains_regex: Optional[List[str]] = None,
+                 must_not_contain_regex: Optional[List[str]] = None,
+                 encoding: Optional[str] = None):
         self.contains: List[str] = contains or []
         self.must_not_contain: List[str] = must_not_contain or []
         self.contains_regex: List[str] = contains_regex or []
@@ -127,19 +124,14 @@ class ContentTest(object):
 
 class FileTest(ContentTest):
     """A class that contains all the properties of a to be tested file."""
-
-    def __init__(
-        self,
-        path: str,
-        md5sum: Optional[str] = None,
-        extract_md5sum: Optional[str] = None,
-        should_exist: bool = DEFAULT_FILE_SHOULD_EXIST,
-        contains: Optional[List[str]] = None,
-        must_not_contain: Optional[List[str]] = None,
-        contains_regex: Optional[List[str]] = None,
-        must_not_contain_regex: Optional[List[str]] = None,
-        encoding: Optional[str] = None,
-    ):
+    def __init__(self, path: str, md5sum: Optional[str] = None,
+                 extract_md5sum: Optional[str] = None,
+                 should_exist: bool = DEFAULT_FILE_SHOULD_EXIST,
+                 contains: Optional[List[str]] = None,
+                 must_not_contain: Optional[List[str]] = None,
+                 contains_regex: Optional[List[str]] = None,
+                 must_not_contain_regex: Optional[List[str]] = None,
+                 encoding: Optional[str] = None):
         """
         A container object
         :param path: the path to the file
@@ -154,13 +146,10 @@ class FileTest(ContentTest):
         :param must_not_contain_regex: a list of regular expression pattersn
         that should not be present in the file
         """
-        super().__init__(
-            contains=contains,
-            must_not_contain=must_not_contain,
-            contains_regex=contains_regex,
-            must_not_contain_regex=must_not_contain_regex,
-            encoding=encoding,
-        )
+        super().__init__(contains=contains, must_not_contain=must_not_contain,
+                         contains_regex=contains_regex,
+                         must_not_contain_regex=must_not_contain_regex,
+                         encoding=encoding)
         self.path = Path(path)
         self.md5sum = md5sum
         self.extract_md5sum = extract_md5sum
@@ -170,17 +159,13 @@ class FileTest(ContentTest):
 class WorkflowTest(object):
     """A class that contains all properties of a to be tested workflow"""
 
-    def __init__(
-        self,
-        name: str,
-        command: str,
-        tags: Optional[List[str]],
-        metadata: Optional[List] = None,
-        exit_code: int = DEFAULT_EXIT_CODE,
-        stdout: ContentTest = ContentTest(),
-        stderr: ContentTest = ContentTest(),
-        files: Optional[List[FileTest]] = None,
-    ):
+    def __init__(self, name: str, command: str,
+                 tags: Optional[List[str]],
+                 metadata: Optional[List] = None,
+                 exit_code: int = DEFAULT_EXIT_CODE,
+                 stdout: ContentTest = ContentTest(),
+                 stderr: ContentTest = ContentTest(),
+                 files: Optional[List[FileTest]] = None):
         """
         Create a WorkflowTest object.
         :param name: The name of the test
@@ -213,5 +198,5 @@ class WorkflowTest(object):
             exit_code=schema.get("exit_code", DEFAULT_EXIT_CODE),
             stdout=ContentTest(**schema.get("stdout", {})),
             stderr=ContentTest(**schema.get("stderr", {})),
-            files=test_files,
+            files=test_files
         )
